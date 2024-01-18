@@ -2,10 +2,15 @@
 
 import allIngredients from '../../../../data/ingredients.json';
 
-import React, { FormEvent, use, useEffect, useState } from 'react';
-import { Ingredient, Meal, MealIngrendient } from '@/models';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { Ingredient, MealIngrendient } from '@/models';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+
+// ---- Temp Imports until nextjs 14 supports these polyfills ----
+// import "core-js/features/array/to-reversed";
+// import "core-js/features/array/to-spliced";
+import "core-js/features/array/to-sorted";
+// --------------------------------------------------------------------
 
 interface IProps {
     onAdd: (ingredient: MealIngrendient) => void;
