@@ -114,10 +114,6 @@ const AddForm = () => {
         window.location.href = '/meals';
     };
 
-    useEffect(() => {
-        console.log(formData);
-    }, [formData]);
-
     return (
         <main className="add-meal-page">
             <form onSubmit={onSubmit}>
