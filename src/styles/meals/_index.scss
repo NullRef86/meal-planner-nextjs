@@ -4,8 +4,8 @@
     gap: 1rem;
 
     .meals {
-        display: grid;
-        grid-template-columns: repeat(3, auto);
+        display: flex;
+        flex-direction: column;
         gap: 2rem;
 
         .meal {

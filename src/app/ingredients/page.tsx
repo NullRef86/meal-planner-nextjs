@@ -8,7 +8,7 @@ import Link from 'next/link';
 const Ingredients = () => {
 
     return (
-        <main>
+        <main className="ingredients-page">
             <div className='title'>
                 <h1>
                     Ingredients
@@ -18,19 +18,26 @@ const Ingredients = () => {
                 </Link>
             </div>
             <AddForm />
-            <ul>
+            <div className="list">
                 {
                     ingredients
-                        .reverse()
+                        .toSorted((a, b) => a.name.localeCompare(b.name))
                         .map((ingredient) => {
                             return (
-                                <li key={ingredient.id}>
-                                    {ingredient.name}
-                                </li>
+                                <div className='ingredient' key={ingredient.id}>
+                                    <div>
+                                        {ingredient.name}
+                                    </div>
+                                    <div>
+                                        <button>
+                                            X
+                                        </button>
+                                    </div>
+                                </div>
                             );
                         })
                 }
-            </ul>
+            </div>
         </main >
     );
 };

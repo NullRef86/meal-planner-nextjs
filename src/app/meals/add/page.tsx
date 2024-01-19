@@ -21,12 +21,10 @@ const AddIngredientRow = ({
 }: IProps) => {
     interface IFormData {
         ingredient?: Ingredient;
-        amount: number;
+        amount?: number;
     }
 
-    const [formData, setFormData] = useState<IFormData>({
-        amount: 0,
-    });
+    const [formData, setFormData] = useState<IFormData>({});
 
     return (
         <tr>
@@ -75,7 +73,7 @@ const AddIngredientRow = ({
                         if (!formData.ingredient) return;
                         onAdd({
                             ingredient: formData.ingredient,
-                            amount: formData.amount,
+                            amount: formData.amount ?? 0,
                         });
                         setFormData({
                             amount: 0,

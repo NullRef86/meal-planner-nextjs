@@ -1,5 +1,4 @@
 'use client';
-import styles from './addForm.module.css';
 
 import React, { FormEvent } from 'react';
 
@@ -18,7 +17,7 @@ const AddForm = ({ }: IProps) => {
     };
 
     return (
-        <form className={styles.form} onSubmit={onSubmit}>
+        <form onSubmit={onSubmit}>
             <div>
                 <label htmlFor="name">Name</label>
                 <input id="name" name="name" type="text" />
