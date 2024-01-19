@@ -1,41 +1,45 @@
 //export const dynamic = 'force-dynamic' // defaults to auto
 
 import { Meal, MealEntity } from '@/models';
-import { streamToBuffer } from '@/utils';
-import { BlobServiceClient } from '@azure/storage-blob';
+import { put } from '@vercel/blob';
 import { v4 as uuidv4 } from 'uuid';
 
-const getBlockBlobClient = () => {
-    const connectionString = process.env.STORAGE_ACCOUNT_CONNECTION_STRING!;
-    const containerName = 'data';
-    const blobName = "meals.json";
+const getBlobContent = async () => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append('pragma', 'no-cache');
+        myHeaders.append('cache-control', 'no-cache');
 
-    const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
-    const containerClient = blobServiceClient.getContainerClient(containerName);
-    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+        const response = await fetch(
+            'https://wkgafazl6buri7p4.public.blob.vercel-storage.com/meals.json',
+            {
+                headers: myHeaders,
+            }
+        );
 
-    return blockBlobClient;
+        if (!response.ok) throw new Error(response.statusText);
+
+        return await response.json() as MealEntity[];
+    }
+    catch (e) {
+        console.log(e);
+        return [] as MealEntity[];
+    }
 }
 
-const getBlobContent = async () => {
-    const blockBlobClient = getBlockBlobClient();
-    const response = await blockBlobClient.download();
-
-    if (response.errorCode) throw new Error(response.errorCode);
-
-    if (!response.readableStreamBody) throw new Error('No readable stream');
-
-    const downloaded = await streamToBuffer(response.readableStreamBody);
-
-    if (!downloaded) { throw new Error('No downloaded content'); }
-
-    return JSON.parse(downloaded.toString()) as MealEntity[];
+const saveBlobContent = async (data: MealEntity[]) => {
+    const json = JSON.stringify(data, null, 4);
+    await put('meals.json', json, {
+        access: 'public',
+        addRandomSuffix: false,
+        cacheControlMaxAge: 0
+    });
 }
 
 export async function GET(request: Request) {
     const data = await getBlobContent();
 
-    return Response.json([...data.reverse()]);
+    return Response.json(data);
 }
 
 export async function POST(request: Request, response: Response) {
@@ -52,11 +56,19 @@ export async function POST(request: Request, response: Response) {
         })),
     });
 
-    const blockBlobClient = getBlockBlobClient();
-
-    const json = JSON.stringify(data, null, 4);
-
-    await blockBlobClient.upload(json, Buffer.byteLength(json));
+    await saveBlobContent(data);
 
     return Response.json(newMeal);
+}
+
+export async function DELETE(request: Request) {
+    const { id } = await request.json();
+
+    const data = await getBlobContent();
+
+    const newData = data.filter(meal => meal.id !== id);
+
+    await saveBlobContent(newData);
+
+    return Response.json(newData);
 }

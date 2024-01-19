@@ -11,15 +11,35 @@ const Meals = () => {
     const [isLoading, setLoading] = useState(true)
 
     useEffect(() => {
-        fetch('/api/meals')
-            .then((res) => res.json())
-            .then((data) => {
-                setMeals(data)
-                setLoading(false)
-            })
+        const func = async () => {
+            const response = await fetch('/api/meals');
+
+            const data = await response.json();
+
+            setMeals(data);
+            setLoading(false);
+        }
+        func();
     }, []);
 
     let content;
+
+    const removeMeal = async (id: string) => {
+        setLoading(true);
+        const response = await fetch(
+            `/api/meals`,
+            {
+                method: 'DELETE',
+                body: JSON.stringify({ id })
+            }
+        )
+
+        const data = await response.json();
+
+        setMeals(data);
+        setLoading(false);
+    }
+
 
     if (isLoading) {
         content = <div>Loading...</div>;
@@ -33,6 +53,9 @@ const Meals = () => {
                             <div className='meal' key={meal.id}>
                                 <h4>
                                     {meal.name}
+                                    <button onClick={() => removeMeal(meal.id)}>
+                                        X
+                                    </button>
                                 </h4>
                                 <div className='ingredients'>
                                     {
