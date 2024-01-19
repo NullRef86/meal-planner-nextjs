@@ -34,11 +34,11 @@ const Ingredients = () => {
                                     <div>
                                         {ingredient.name}
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <button>
                                             X
                                         </button>
-                                    </div>
+                                    </div> */}
                                 </div>
                             );
                         })

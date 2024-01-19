@@ -16,7 +16,7 @@ interface IProps {
     onAdd: (ingredient: MealIngrendient) => void;
 }
 
-const AddIngredientRow = ({
+const AddIngredientForm = ({
     onAdd
 }: IProps) => {
     interface IFormData {
@@ -27,62 +27,55 @@ const AddIngredientRow = ({
     const [formData, setFormData] = useState<IFormData>({});
 
     return (
-        <tr>
-            <td>
-                <div style={{ display: 'flex' }}>
-                    <select
-                        name="ingredient"
-                        onChange={(e) => setFormData({ ...formData, ingredient: allIngredients.find((ingredient) => ingredient.id === e.target.value) })}
-                        value={formData.ingredient?.id ?? ''}
-                    >
-                        <option value="">
-                            Select
-                        </option>
-                        {
-                            ([...allIngredients] as Ingredient[])
-                                .toSorted((a, b) => a.name.localeCompare(b.name))
-                                .map((ingredient) => {
-                                    return (
-                                        <option key={ingredient.id} value={ingredient.id}>
-                                            {ingredient.name}
-                                        </option>
-                                    );
-                                })
-                        }
-                    </select>
-                </div>
-            </td>
-            <td className="amount-cell">
-                <div>
-                    <input
-                        name="amount"
-                        type="number"
-                        onChange={(e) => setFormData({ ...formData, amount: parseInt(e.target.value) })}
-                        value={formData.amount}
-                    />
-                    <span>
-                        {formData.ingredient?.unit}
-                    </span>
-                </div>
-            </td>
-            <td>
-                <button
-                    disabled={!formData.ingredient}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        if (!formData.ingredient) return;
-                        onAdd({
-                            ingredient: formData.ingredient,
-                            amount: formData.amount ?? 0,
-                        });
-                        setFormData({
-                            amount: 0,
-                        });
-                    }}>
-                    Add
-                </button>
-            </td>
-        </tr >
+        <div className='add-form'>
+            <select
+                name="ingredient"
+                onChange={(e) => setFormData({ ...formData, ingredient: allIngredients.find((ingredient) => ingredient.id === e.target.value) })}
+                value={formData.ingredient?.id ?? ''}
+            >
+                <option value="">
+                    Select Ingredient
+                </option>
+                {
+                    ([...allIngredients] as Ingredient[])
+                        .toSorted((a, b) => a.name.localeCompare(b.name))
+                        .map((ingredient) => {
+                            return (
+                                <option key={ingredient.id} value={ingredient.id}>
+                                    {ingredient.name}
+                                </option>
+                            );
+                        })
+                }
+            </select>
+
+            <label>
+                Amount:
+                <input
+                    name="amount"
+                    type="number"
+                    onChange={(e) => setFormData({ ...formData, amount: parseInt(e.target.value) })}
+                    value={formData.amount}
+                />
+                <span>
+                    {formData.ingredient?.unit}
+                </span>
+
+            </label>
+            <button
+                disabled={!formData.ingredient}
+                onClick={(e) => {
+                    e.preventDefault();
+                    if (!formData.ingredient) return;
+                    onAdd({
+                        ingredient: formData.ingredient,
+                        amount: formData.amount ?? 0,
+                    });
+                    setFormData({});
+                }}>
+                Add
+            </button>
+        </div>
     );
 }
 
@@ -177,20 +170,21 @@ const AddForm = () => {
                                 )
                             )
                         }
-                        <AddIngredientRow
-                            onAdd={(newIngredient) => {
-                                const newIngredients = [...formData.ingredients];
-
-                                newIngredients.push({
-                                    ingredient: newIngredient.ingredient,
-                                    amount: newIngredient.amount,
-                                });
-
-                                setFormData({ ...formData, ingredients: newIngredients });
-                            }}
-                        />
                     </tbody>
                 </table>
+
+                <AddIngredientForm
+                    onAdd={(newIngredient) => {
+                        const newIngredients = [...formData.ingredients];
+
+                        newIngredients.push({
+                            ingredient: newIngredient.ingredient,
+                            amount: newIngredient.amount,
+                        });
+
+                        setFormData({ ...formData, ingredients: newIngredients });
+                    }}
+                />
 
                 <button type="submit">
                     Save Meal

@@ -10,7 +10,7 @@ const AddForm = ({ }: IProps) => {
     async function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const response = await fetch('/api/ingredients', {
+        await fetch('/api/ingredients', {
             method: 'POST',
             body: JSON.stringify(Object.fromEntries(formData.entries())),
         })
