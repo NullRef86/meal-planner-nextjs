@@ -2,12 +2,12 @@
 
 import React, { Fragment, useEffect, useState } from 'react';
 import ingredients from '../../../data/ingredients.json';
-import { Meal } from '@/models';
+import { MealEntity } from '@/models';
 import Link from 'next/link';
 
 
 const Meals = () => {
-    const [meals, setMeals] = useState<Meal[]>([]);
+    const [meals, setMeals] = useState<MealEntity[]>([]);
     const [isLoading, setLoading] = useState(true)
 
     useEffect(() => {
