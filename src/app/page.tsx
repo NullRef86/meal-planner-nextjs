@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { env } from 'process'
 
 export default function Home() {
     return (
@@ -14,6 +15,10 @@ export default function Home() {
                     <Link href="/meals">View All Meals</Link>
                 </li>
             </ul>
+
+            <div>
+                THIS_IS_SECRET: {env.THIS_IS_SECRET}
+            </div>
         </main>
     )
 }
