@@ -5,6 +5,12 @@ import ingredients from '../../../data/ingredients.json';
 import AddForm from './components/addForm';
 import Link from 'next/link';
 
+// ---- Temp Imports until nextjs 14 supports these polyfills ----
+// import "core-js/features/array/to-reversed";
+// import "core-js/features/array/to-spliced";
+import "core-js/features/array/to-sorted";
+// --------------------------------------------------------------------
+
 const Ingredients = () => {
 
     return (
