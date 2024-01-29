@@ -1,34 +1,27 @@
-//export const dynamic = 'force-dynamic' // defaults to auto
-
 import { Ingredient } from '@/models';
-import { promises as fs } from 'fs';
-import { v4 as uuidv4 } from 'uuid';
+import { sql } from "@vercel/postgres";
 
-// export async function GET(request: Request) {
-//     const file = await fs.readFile(process.cwd() + '/data/ingredients.json', 'utf8');
+export async function GET(request: Request) {
+    const { rows } = await sql`SELECT * FROM ingredients`;
 
-//     const data = JSON.parse(file) as Ingredient[];
-
-//     return Response.json([data.reverse());
-// }
+    return Response.json(rows);
+}
 
 export async function POST(request: Request, response: Response) {
-    //console.log('ingredient', request.json());
     const newIngredient = await request.json() as Ingredient;
-    console.log('ingredient', newIngredient);
-    const file = await fs.readFile(process.cwd() + '/data/ingredients.json', 'utf8');
-    const ingredients = JSON.parse(file) as Ingredient[];
 
-    newIngredient.id = uuidv4();
+    await sql`
+        INSERT INTO ingredients (name, units, category) 
+        VALUES (${newIngredient.name}, ${newIngredient.units}, ${newIngredient.category})
+    `;
 
-    ingredients.push(newIngredient);
+    return new Response(null, { status: 204 });
+}
 
-    await fs.writeFile(
-        process.cwd() + '/data/ingredients.json',
-        JSON.stringify(ingredients, null, 4)
-    );
+export async function DELETE(request: Request) {
+    const { id } = await request.json();
 
-    return Response.json(newIngredient);
+    await sql`DELETE FROM ingredients WHERE id = ${id}`;
 
-
+    return new Response(null, { status: 204 });
 }

@@ -1,43 +1,11 @@
-//export const dynamic = 'force-dynamic' // defaults to auto
-
 import { Meal, MealEntity } from '@/models';
-import { put } from '@vercel/blob';
+import { getBlobContent, saveBlobContent } from '@/utils';
 import { v4 as uuidv4 } from 'uuid';
 
-const getBlobContent = async () => {
-    try {
-        var myHeaders = new Headers();
-        myHeaders.append('pragma', 'no-cache');
-        myHeaders.append('cache-control', 'no-cache');
-
-        const response = await fetch(
-            'https://wkgafazl6buri7p4.public.blob.vercel-storage.com/meals.json',
-            {
-                headers: myHeaders,
-            }
-        );
-
-        if (!response.ok) throw new Error(response.statusText);
-
-        return await response.json() as MealEntity[];
-    }
-    catch (e) {
-        console.log(e);
-        return [] as MealEntity[];
-    }
-}
-
-const saveBlobContent = async (data: MealEntity[]) => {
-    const json = JSON.stringify(data, null, 4);
-    await put('meals.json', json, {
-        access: 'public',
-        addRandomSuffix: false,
-        cacheControlMaxAge: 0
-    });
-}
+const FILE_NAME = 'meals.json';
 
 export async function GET(request: Request) {
-    const data = await getBlobContent();
+    const data = await getBlobContent<MealEntity>(FILE_NAME);
 
     return Response.json(data);
 }
@@ -45,7 +13,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request, response: Response) {
     const newMeal = await request.json() as Meal;
 
-    const data = await getBlobContent();
+    const data = await getBlobContent<MealEntity>(FILE_NAME);
 
     data.push({
         id: uuidv4(),
@@ -56,7 +24,7 @@ export async function POST(request: Request, response: Response) {
         })),
     });
 
-    await saveBlobContent(data);
+    await saveBlobContent<MealEntity>(FILE_NAME, data);
 
     return Response.json(newMeal);
 }
@@ -64,11 +32,11 @@ export async function POST(request: Request, response: Response) {
 export async function DELETE(request: Request) {
     const { id } = await request.json();
 
-    const data = await getBlobContent();
+    const data = await getBlobContent<MealEntity>(FILE_NAME);
 
-    const newData = data.filter(meal => meal.id !== id);
+    const newData = data.filter(item => item.id !== id);
 
-    await saveBlobContent(newData);
+    await saveBlobContent<MealEntity>(FILE_NAME, newData);
 
     return Response.json(newData);
 }
