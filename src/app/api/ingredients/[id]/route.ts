@@ -1,8 +1,5 @@
 import { Ingredient } from '@/models';
-import { getBlobContent, saveBlobContent } from '@/utils';
 import { sql } from '@vercel/postgres';
-
-const FILE_NAME = 'ingredients.json';
 
 export async function GET(request: Request, context: { params: { id: string } }) {
 

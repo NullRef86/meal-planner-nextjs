@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 
 // ---- Temp Imports until nextjs 14 supports these polyfills ----
@@ -6,20 +8,13 @@ import React, { useEffect, useState } from 'react';
 import "core-js/features/array/to-sorted";
 import { Ingredient } from '@/models';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { getIngredients } from '../apiCaller';
 // --------------------------------------------------------------------
 
 const List = () => {
-    const navigate = useNavigate();
-
     const queryClient = useQueryClient();
-    const { data: ingredients, isFetching } = useQuery<Ingredient[]>(
-        'ingredients',
-        async () => {
-            const response = await fetch('/api/ingredients');
-            return await response.json() ?? [];
-        }
-    );
+    const { data: ingredients, isFetching } = useQuery<Ingredient[]>('ingredients', getIngredients);
 
     const { mutate: remove, isLoading: isRemoving } = useMutation({
         mutationFn: (id: string) => {
@@ -55,7 +50,7 @@ const List = () => {
                                 <div
                                     className='ingredient'
                                     key={ingredient.id}
-                                    onClick={() => navigate(`/ingredients/form/${ingredient.id}`)}
+                                    onClick={() => window.location.href = `/ingredients/view/${ingredient.id}`}
                                 >
                                     <div>
                                         {ingredient.name} | {ingredient.units} | {ingredient.category}
@@ -83,13 +78,16 @@ const List = () => {
                 <h1>
                     Ingredients
                 </h1>
-                <Link to={'/'}>
+                <Link href={'/'}>
                     Back to Home
                 </Link>
             </div>
-            <button onClick={() => navigate('/ingredients/form')}>
-                Add New Ingredient
-            </button>
+
+            <Link href={'/ingredients/view'}>
+                <button>
+                    Add New Ingredient
+                </button>
+            </Link>
             {content}
         </main >
     );
