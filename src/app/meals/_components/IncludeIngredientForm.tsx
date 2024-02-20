@@ -4,7 +4,10 @@ import { Button } from "@/app/_components/client-components/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Ingredient } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+// ---- Temp Imports until nextjs 14 supports these polyfills ----
+import "core-js/features/array/to-sorted";
 
 interface IProps {
     ingredients: Ingredient[];
