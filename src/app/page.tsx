@@ -1,17 +1,21 @@
-import Link from 'next/link'
+import Main from './_components/Main'
+import Header from './_components/Header'
+import Link from './_components/Link'
 
 export default function Home() {
     return (
-        <main className="home-page">
-            <h1>
+        <Main>
+            <Header>
                 Meal Planner
-            </h1>
-            <div>
-                <Link href="/ingredients">View All Ingredients</Link>
+            </Header>
+            <div className='flex flex-col gap-2'>
+                <Link href="/ingredients">
+                    View All Ingredients
+                </Link>
+                <Link href="/meals">
+                    View All Meals
+                </Link>
             </div>
-            <div>
-                <Link href="/meals">View All Meals</Link>
-            </div>
-        </main>
+        </Main>
     )
 }

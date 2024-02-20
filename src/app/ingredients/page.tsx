@@ -1,96 +1,64 @@
-'use client';
+import { Suspense } from "react";
+import { addIngredient, getIngredients } from "./actions";
+import { Button, DefaultButtonClassName } from "../_components/client-components/Button";
+import { ListItem } from "./_components/client-components/ListItem";
+import Link from "next/link";
+import Header from "../_components/Header";
+import Main from "../_components/Main";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-import React, { useEffect, useState } from 'react';
+const groupByToMap = <T, Q>(array: T[], predicate: (value: T, index: number, array: T[]) => Q) =>
+    array.reduce((map, value, index, array) => {
+        const key = predicate(value, index, array);
+        map.get(key)?.push(value) ?? map.set(key, [value]);
+        return map;
+    }, new Map<Q, T[]>());
 
-// ---- Temp Imports until nextjs 14 supports these polyfills ----
-// import "core-js/features/array/to-reversed";
-// import "core-js/features/array/to-spliced";
-import "core-js/features/array/to-sorted";
-import { Ingredient } from '@/models';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import Link from 'next/link';
-import { getIngredients } from '../apiCaller';
-// --------------------------------------------------------------------
+const List = async () => {
+    const ingredients = await getIngredients();
 
-const List = () => {
-    const queryClient = useQueryClient();
-    const { data: ingredients, isFetching } = useQuery<Ingredient[]>('ingredients', getIngredients);
-
-    const { mutate: remove, isLoading: isRemoving } = useMutation({
-        mutationFn: (id: string) => {
-            return fetch(
-                `/api/ingredients`,
-                {
-                    method: 'DELETE',
-                    body: JSON.stringify({ id })
-                }
-            )
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: 'ingredients' });
-        }
-    });
-
-    let content;
-
-    if (isFetching) {
-        content = <div>Loading...</div>;
-    }
-    else if (!ingredients) {
-        content = <div>Something went wrong.</div>;
-    }
-    else {
-        content = (
-            <div className="list">
-                {
-                    ingredients!
-                        .toSorted((a, b) => a.name.localeCompare(b.name))
-                        .map((ingredient) => {
-                            return (
-                                <div
-                                    className='ingredient'
-                                    key={ingredient.id}
-                                    onClick={() => window.location.href = `/ingredients/view/${ingredient.id}`}
-                                >
-                                    <div>
-                                        {ingredient.name} | {ingredient.units} | {ingredient.category}
-                                    </div>
-                                    <button
-                                        disabled={isRemoving}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            remove(ingredient.id);
-                                        }}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                            );
-                        })
-                }
-            </div>
-        );
-    }
+    const groupedIngredients = Array.from(groupByToMap(ingredients, (ingredient) => ingredient.category));
 
     return (
-        <main className="ingredients-page">
-            <div className='title'>
-                <h1>
-                    Ingredients
-                </h1>
-                <Link href={'/'}>
-                    Back to Home
+        <div className="flex flex-col gap-4">
+            {
+                groupedIngredients
+                    .sort(([a], [b]) => a.localeCompare(b))
+                    .map(([category, ingredients]) => (
+                        <div key={category} className="flex flex-col gap-4">
+                            <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b-slate-500 border-b-2 text-center pb-2">
+                                {category}
+                            </h2>
+                            <ul className="flex flex-wrap gap-2">
+                                {ingredients.map((ingredient) => (
+                                    <ListItem key={ingredient.id} ingredient={ingredient} />
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+            }
+        </div>
+    );
+}
+
+
+export default async function Home() {
+    return (
+        <Main>
+            <Header backUrl="/">
+                Ingredients
+            </Header>
+
+            <div className="flex justify-center mb-4">
+                <Link className={DefaultButtonClassName} href={'/ingredients/view'}>
+                    Add New Ingredient <FontAwesomeIcon icon={faPlus} className="text-lg" />
                 </Link>
             </div>
 
-            <Link href={'/ingredients/view'}>
-                <button>
-                    Add New Ingredient
-                </button>
-            </Link>
-            {content}
-        </main >
+            <Suspense fallback={<p>Loading...</p>}>
+                <List />
+            </Suspense>
+        </Main>
     );
-};
-
-export default List;
+}

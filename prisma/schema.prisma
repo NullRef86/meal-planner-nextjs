@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  //directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Ingredient {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(255)
+  units    String @db.VarChar(255)
+  category String @db.VarChar(255)
+
+  recipes RecipeIngredient[]
+}
+
+model Meal {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+
+  ingredients RecipeIngredient[]
+}
+
+model RecipeIngredient {
+  id     Int   @id @default(autoincrement())
+  amount Float
+
+  ingredientId Int
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  mealId Int
+  meal   Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
+}
