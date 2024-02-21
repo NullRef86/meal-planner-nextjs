@@ -7,6 +7,7 @@ import Header from "../_components/Header";
 import Main from "../_components/Main";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import LoadingPanel from "../_components/LoadingPanel";
 
 const groupByToMap = <T, Q>(array: T[], predicate: (value: T, index: number, array: T[]) => Q) =>
     array.reduce((map, value, index, array) => {
@@ -57,7 +58,7 @@ export default async function Home() {
                 </Link>
             </div>
 
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<LoadingPanel />}>
                 <List />
             </Suspense>
         </Main>

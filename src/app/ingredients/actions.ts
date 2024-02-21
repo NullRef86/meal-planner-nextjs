@@ -1,32 +1,31 @@
 'use server'
 
-import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { db } from "../../../prisma/client";
+
 
 export const getIngredient = async (id: number) => {
-    const prisma = new PrismaClient();
+
     try {
-        return await prisma.ingredient.findFirst({
+        return await db.ingredient.findFirst({
             where: { id }
         });
     }
     catch (e) { console.error(e); }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 }
 export const getIngredients = async () => {
-    const prisma = new PrismaClient();
     try {
-        return await prisma.ingredient.findMany();
+        return await db.ingredient.findMany();
     }
     catch (e) { console.error(e); return []; }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 }
 
 export const addIngredient = async (formData: FormData) => {
-    const prisma = new PrismaClient();
     try {
-        await prisma.ingredient.create({
+        await db.ingredient.create({
             data: {
                 name: formData.get('name')! as string,
                 units: formData.get('units')! as string,
@@ -35,16 +34,15 @@ export const addIngredient = async (formData: FormData) => {
         });
     }
     catch (e) { console.error(e); }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 
-    revalidatePath('/ingredients');
+    revalidatePath('/');
     redirect('/ingredients');
 }
 
 export const updateIngredient = async (formData: FormData) => {
-    const prisma = new PrismaClient();
     try {
-        await prisma.ingredient.update({
+        await db.ingredient.update({
             where: {
                 id: parseInt(formData.get('id')! as string)
             },
@@ -56,23 +54,22 @@ export const updateIngredient = async (formData: FormData) => {
         });
     }
     catch (e) { console.error(e); }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 
-    revalidatePath('/ingredients');
+    revalidatePath('/');
     redirect('/ingredients');
 }
 
 export const deleteIngredient = async (formData: FormData) => {
-    const prisma = new PrismaClient();
     try {
-        await prisma.ingredient.delete({
+        await db.ingredient.delete({
             where: {
                 id: parseInt(formData.get('id')! as string)
             }
         });
     }
     catch (e) { console.error(e); }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 
-    revalidatePath('/ingredients');
+    revalidatePath('/');
 }

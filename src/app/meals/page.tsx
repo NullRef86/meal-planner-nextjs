@@ -5,6 +5,9 @@ import { ListItem } from "./_components/client-components/ListItem";
 import Link from "next/link";
 import Header from "../_components/Header";
 import Main from "../_components/Main";
+import LoadingPanel from "../_components/LoadingPanel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const List = async () => {
     const meals = await getMeals();
@@ -30,11 +33,11 @@ export default async function Meals() {
 
             <div className="flex justify-center mb-4">
                 <Link className={DefaultButtonClassName} href={'/meals/view'}>
-                    Add New Meal
+                    Add New Meal <FontAwesomeIcon icon={faPlus} />
                 </Link>
             </div>
 
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<LoadingPanel />}>
                 <List />
             </Suspense>
         </Main>

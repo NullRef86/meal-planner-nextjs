@@ -1,14 +1,13 @@
 'use server'
 
-import { Meal, PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { IFormData } from "./_components/Form";
+import { db } from "../../../prisma/client";
 
 export const getMeal = async (id: number) => {
-    const prisma = new PrismaClient();
     try {
-        return await prisma.meal.findFirst({
+        return await db.meal.findFirst({
             where: { id },
             include: {
                 ingredients: {
@@ -20,12 +19,11 @@ export const getMeal = async (id: number) => {
         });
     }
     catch (e) { console.error(e); }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 }
 export const getMeals = async () => {
-    const prisma = new PrismaClient();
     try {
-        return await prisma.meal.findMany({
+        return await db.meal.findMany({
             include: {
                 ingredients: {
                     include: {
@@ -36,13 +34,12 @@ export const getMeals = async () => {
         });
     }
     catch (e) { console.error(e); return []; }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 }
 
 export const addMeal = async (meal: IFormData) => {
-    const prisma = new PrismaClient();
     try {
-        await prisma.meal.create({
+        await db.meal.create({
             data: {
                 name: meal.name,
                 ingredients: {
@@ -59,14 +56,13 @@ export const addMeal = async (meal: IFormData) => {
         });
     }
     catch (e) { console.error(e); }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 
     revalidatePath('/meals');
     redirect('/meals');
 }
 
 export const updateMeal = async (meal: IFormData) => {
-    const prisma = new PrismaClient();
     try {
         if (!meal.id) throw new Error('No meal ID provided');
 
@@ -76,7 +72,7 @@ export const updateMeal = async (meal: IFormData) => {
 
         existingMeal.name = meal.name;
 
-        await prisma.meal.update({
+        await db.meal.update({
             where: {
                 id: meal.id
             },
@@ -97,23 +93,22 @@ export const updateMeal = async (meal: IFormData) => {
         });
     }
     catch (e) { console.error(e); }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 
     revalidatePath('/meals');
     redirect('/meals');
 }
 
 export const deleteMeal = async (formData: FormData) => {
-    const prisma = new PrismaClient();
     try {
-        await prisma.meal.delete({
+        await db.meal.delete({
             where: {
                 id: parseInt(formData.get('id')! as string)
             }
         });
     }
     catch (e) { console.error(e); }
-    finally { await prisma.$disconnect(); }
+    finally { await db.$disconnect(); }
 
     revalidatePath('/');
 }

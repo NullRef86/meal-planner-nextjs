@@ -3,9 +3,9 @@
 import { deleteMeal } from "../../actions";
 import { Button } from "../../../_components/client-components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { MealWithIngredients } from "../../models";
+import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 
 interface IProps {
     meal: MealWithIngredients;
@@ -35,7 +35,7 @@ export const ListItem = ({ meal }: IProps) => {
                 <form action={deleteMeal}>
                     <input type="hidden" name="id" value={meal.id} />
                     <Button>
-                        <FontAwesomeIcon icon={faTrash} />
+                        <FontAwesomeIcon icon={faTrashAlt} />
                     </Button>
                 </form>
             </li>
