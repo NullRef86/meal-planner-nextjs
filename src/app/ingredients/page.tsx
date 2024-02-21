@@ -42,6 +42,8 @@ const List = async () => {
     );
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
     return (
         <Main>
