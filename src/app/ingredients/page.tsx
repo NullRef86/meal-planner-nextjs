@@ -52,7 +52,7 @@ export default async function Home() {
 
             <div className="flex justify-center mb-4">
                 <Link className={DefaultButtonClassName} href={'/ingredients/view'}>
-                    Add New Ingredient <FontAwesomeIcon icon={faPlus} className="text-lg" />
+                    Add New Ingredient <FontAwesomeIcon icon={faPlus} />
                 </Link>
             </div>
 
