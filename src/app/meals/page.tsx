@@ -19,7 +19,9 @@ const List = async () => {
 }
 
 
-export default async function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Meals() {
     return (
         <Main>
             <Header backUrl="/">
