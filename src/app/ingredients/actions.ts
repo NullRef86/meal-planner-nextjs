@@ -37,7 +37,7 @@ export const addIngredient = async (formData: FormData) => {
     catch (e) { console.error(e); }
     finally { await prisma.$disconnect(); }
 
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
     redirect('/ingredients');
 }
 
@@ -58,7 +58,7 @@ export const updateIngredient = async (formData: FormData) => {
     catch (e) { console.error(e); }
     finally { await prisma.$disconnect(); }
 
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
     redirect('/ingredients');
 }
 
@@ -74,5 +74,5 @@ export const deleteIngredient = async (formData: FormData) => {
     catch (e) { console.error(e); }
     finally { await prisma.$disconnect(); }
 
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
 }
