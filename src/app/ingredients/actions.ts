@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+export const dynamic = 'force-dynamic';
 export const getIngredient = async (id: number) => {
     const prisma = new PrismaClient();
     try {
