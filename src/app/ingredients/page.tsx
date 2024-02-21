@@ -42,7 +42,6 @@ const List = async () => {
     );
 }
 
-
 export default async function Home() {
     return (
         <Main>

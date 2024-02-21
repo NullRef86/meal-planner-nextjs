@@ -4,7 +4,6 @@ import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export const dynamic = 'force-dynamic';
 export const getIngredient = async (id: number) => {
     const prisma = new PrismaClient();
     try {
@@ -38,7 +37,7 @@ export const addIngredient = async (formData: FormData) => {
     catch (e) { console.error(e); }
     finally { await prisma.$disconnect(); }
 
-    revalidatePath('/', 'layout');
+    revalidatePath('/ingredients');
     redirect('/ingredients');
 }
 
@@ -59,7 +58,7 @@ export const updateIngredient = async (formData: FormData) => {
     catch (e) { console.error(e); }
     finally { await prisma.$disconnect(); }
 
-    revalidatePath('/', 'layout');
+    revalidatePath('/ingredients');
     redirect('/ingredients');
 }
 
@@ -75,5 +74,5 @@ export const deleteIngredient = async (formData: FormData) => {
     catch (e) { console.error(e); }
     finally { await prisma.$disconnect(); }
 
-    revalidatePath('/', 'layout');
+    revalidatePath('/ingredients');
 }
