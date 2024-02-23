@@ -96,7 +96,7 @@ export default async function Home({ searchParams }: IProps) {
             </div>
 
             <Suspense fallback={<LoadingPanel />}>
-                <List groupBy={searchParams?.groupBy} />
+                <List />
             </Suspense>
         </Main>
     );
