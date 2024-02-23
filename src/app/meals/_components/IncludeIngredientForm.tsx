@@ -12,6 +12,7 @@ import { useContext, useState } from "react";
 import { default as IngredientForm } from "@/app/ingredients/_components/Form";
 import { addIngredient, getIngredients } from "@/app/ingredients/actions";
 import { ModalContext } from "@/app/_components/Main";
+import { groupBy } from "@/utils";
 
 interface IProps {
     initialIngredientSelectList: Ingredient[];
@@ -34,6 +35,8 @@ const IncludeIngredientForm = ({
 
     const [ingredientsSelectList, setIngredientsSelectList] = useState(initialIngredientSelectList);
 
+    const NEW_INGREDIENT_OPTION_KEY = '--New--';
+
     return (
         <>
             <div className="flex gap-4">
@@ -42,7 +45,7 @@ const IncludeIngredientForm = ({
                     <Select
                         name="ingredient"
                         onChange={(e) => {
-                            if (e.target.value === '--New--') {
+                            if (e.target.value === NEW_INGREDIENT_OPTION_KEY) {
                                 modalContext.show({
                                     title: 'Add New Ingredient',
                                     content: (
@@ -73,29 +76,31 @@ const IncludeIngredientForm = ({
                         }}
                         value={formData.ingredient?.id ?? ''}
                     >
+                        <option value="">
+                            Select...
+                        </option>
+                        <option value={NEW_INGREDIENT_OPTION_KEY}>
+                            Add New Ingredient
+                        </option>
                         {
-                            <>
-                                <option value="">
-                                    Select...
-                                </option>
-                                <option value="--New--">
-                                    -- New Ingredient --
-                                </option>
-                                {
-                                    ingredientsSelectList
-                                        .toSorted((a, b) => a.name.localeCompare(b.name))
-                                        .map((ingredient) => {
-                                            return (
-                                                <option
-                                                    key={ingredient.id}
-                                                    value={ingredient.id}
-                                                >
-                                                    {ingredient.name} ({ingredient.units})
-                                                </option>
-                                            );
-                                        })
-                                }
-                            </>
+                            groupBy(ingredientsSelectList, (ingredient) => ingredient.category)
+                                .sort(([a], [b]) => a.localeCompare(b))
+                                .map(([category, ingredients]) => (
+                                    <optgroup key={category} label={category}>
+                                        {
+                                            ingredients
+                                                .sort((a, b) => a.name.localeCompare(b.name))
+                                                .map((ingredient) => (
+                                                    <option
+                                                        key={ingredient.id}
+                                                        value={ingredient.id}
+                                                    >
+                                                        {ingredient.name} ({ingredient.units})
+                                                    </option>
+                                                ))
+                                        }
+                                    </optgroup>
+                                ))
                         }
                     </Select>
                 </div>

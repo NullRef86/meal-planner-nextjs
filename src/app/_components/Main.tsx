@@ -19,7 +19,7 @@ export const ModalContext = createContext<IModalContext>(undefined!);
 export default function Main({ children }: PropsWithChildren) {
     const [modalData, setModalData] = useState<IModalData>();
 
-    const defaultContainerClasses = 'pt-4 lg:w-1/2 md:w-3/4';
+    const defaultContainerClasses = 'py-4 lg:w-1/2 md:w-3/4';
 
     return (
         <ModalContext.Provider value={
@@ -45,7 +45,7 @@ export default function Main({ children }: PropsWithChildren) {
                             className={cn(
                                 'container',
                                 defaultContainerClasses,
-                                'border rounded-lg bg-black'
+                                'border rounded-lg bg-black h-full'
                             )}
                         >
                             <Header onCancel={() => { setModalData(undefined) }}>

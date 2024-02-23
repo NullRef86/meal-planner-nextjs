@@ -8,14 +8,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import LoadingPanel from "../_components/LoadingPanel";
 import Link from "../_components/Link";
 import { Ingredient } from "@prisma/client";
-
-const groupByToMap = <T, Q>(array: T[], predicate: (value: T, index: number, array: T[]) => Q) =>
-    array.reduce((map, value, index, array) => {
-        const key = predicate(value, index, array);
-        map.get(key)?.push(value) ?? map.set(key, [value]);
-        return map;
-    }, new Map<Q, T[]>());
-
+import { groupBy } from "@/utils";
 
 export const dynamic = 'force-dynamic';
 
@@ -47,7 +40,7 @@ export default async function Home({ searchParams }: IProps) {
                 return <ListItems ingredients={ingredients} />;
             case 'category':
             default:
-                const groupedIngredients = Array.from(groupByToMap(ingredients, (ingredient) => ingredient.category));
+                const groupedIngredients = groupBy(ingredients, (ingredient) => ingredient.category);
 
                 return (
                     <div className="flex flex-col gap-2">
