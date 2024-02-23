@@ -1,16 +1,20 @@
+// ---- Temp Imports until nextjs 14 supports these polyfills ----
+import "core-js/features/array/to-sorted";
+// --------------------------------------------------------------------
+
 import Input from "@/app/_components/Input";
 import { Select } from "@/app/_components/Select";
 import { Button } from "@/app/_components/client-components/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Ingredient } from "@prisma/client";
-import { useState } from "react";
-
-// ---- Temp Imports until nextjs 14 supports these polyfills ----
-import "core-js/features/array/to-sorted";
+import { useContext, useState } from "react";
+import { default as IngredientForm } from "@/app/ingredients/_components/Form";
+import { addIngredient, getIngredients } from "@/app/ingredients/actions";
+import { ModalContext } from "@/app/_components/Main";
 
 interface IProps {
-    ingredients: Ingredient[];
+    initialIngredientSelectList: Ingredient[];
     onAdd: (ingredient: IFormData) => void;
 }
 
@@ -20,11 +24,15 @@ export interface IFormData {
 }
 
 const IncludeIngredientForm = ({
-    ingredients,
+    initialIngredientSelectList,
     onAdd
 }: IProps) => {
 
     const [formData, setFormData] = useState<IFormData>({});
+
+    const modalContext = useContext(ModalContext);
+
+    const [ingredientsSelectList, setIngredientsSelectList] = useState(initialIngredientSelectList);
 
     return (
         <>
@@ -33,10 +41,36 @@ const IncludeIngredientForm = ({
                     <label>Ingredient:</label>
                     <Select
                         name="ingredient"
-                        onChange={(e) => setFormData({
-                            ...formData,
-                            ingredient: ingredients?.find((ingredient) => ingredient.id === Number(e.target.value))
-                        })}
+                        onChange={(e) => {
+                            if (e.target.value === '--New--') {
+                                modalContext.show({
+                                    title: 'Add New Ingredient',
+                                    content: (
+                                        <IngredientForm
+                                            action={async (formData) => {
+                                                addIngredient(formData);
+
+                                                const updatedIngredientsList = await getIngredients();
+
+                                                setIngredientsSelectList(updatedIngredientsList);
+                                                setFormData({
+                                                    ...formData,
+                                                    ingredient: updatedIngredientsList.find(i => i.name === formData.get('name'))
+                                                });
+
+                                                modalContext.hide();
+                                            }}
+                                        />
+                                    )
+                                });
+                                return;
+                            }
+
+                            setFormData({
+                                ...formData,
+                                ingredient: ingredientsSelectList?.find((ingredient) => ingredient.id === Number(e.target.value))
+                            });
+                        }}
                         value={formData.ingredient?.id ?? ''}
                     >
                         {
@@ -44,12 +78,18 @@ const IncludeIngredientForm = ({
                                 <option value="">
                                     Select...
                                 </option>
+                                <option value="--New--">
+                                    -- New Ingredient --
+                                </option>
                                 {
-                                    ingredients
+                                    ingredientsSelectList
                                         .toSorted((a, b) => a.name.localeCompare(b.name))
                                         .map((ingredient) => {
                                             return (
-                                                <option key={ingredient.id} value={ingredient.id}>
+                                                <option
+                                                    key={ingredient.id}
+                                                    value={ingredient.id}
+                                                >
                                                     {ingredient.name} ({ingredient.units})
                                                 </option>
                                             );
@@ -80,11 +120,10 @@ const IncludeIngredientForm = ({
                             });
                             setFormData({});
                         }}>
-                        <FontAwesomeIcon icon={faPlus} />
+                        <FontAwesomeIcon icon={faPlus} className="text-xl" />
                     </Button>
                 </div>
             </div>
-
         </>
     );
 }

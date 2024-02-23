@@ -37,7 +37,6 @@ export const addIngredient = async (formData: FormData) => {
     finally { await db.$disconnect(); }
 
     revalidatePath('/');
-    redirect('/ingredients');
 }
 
 export const updateIngredient = async (formData: FormData) => {
@@ -57,7 +56,6 @@ export const updateIngredient = async (formData: FormData) => {
     finally { await db.$disconnect(); }
 
     revalidatePath('/');
-    redirect('/ingredients');
 }
 
 export const deleteIngredient = async (formData: FormData) => {

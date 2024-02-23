@@ -24,9 +24,19 @@ export const ListItem = ({ meal }: IProps) => {
                     </h2>
                     <ul>
                         {
-                            meal.ingredients.map((i) => (
-                                <li key={i.ingredientId} className="list-inside list-disc">
-                                    {i.ingredient.name} <span className="italic">({i.amount} {i.ingredient.units})</span>
+                            meal.ingredients.map((recepeItem) => (
+                                <li key={recepeItem.ingredient.id} className="grid grid-cols-2 gap-2">
+                                    <span className="flex gap-1 text-sm text-gray-600 dark:text-gray-400">
+                                        <span>
+                                            {recepeItem.amount}
+                                        </span>
+                                        <span>
+                                            {recepeItem.ingredient.units}
+                                        </span>
+                                    </span>
+                                    <span className="text-md font-bold tracking-tight text-gray-900 dark:text-white">
+                                        {recepeItem.ingredient.name}
+                                    </span>
                                 </li>
                             ))
                         }

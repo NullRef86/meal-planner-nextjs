@@ -20,7 +20,7 @@ export default async function View({ params }: { params: { id: string } }) {
             </Header>
             <Form
                 action={updateMeal}
-                ingredients={ingredients}
+                initialListOfAllIngredients={ingredients}
                 initialFormData={{
                     id: meal.id,
                     name: meal.name,

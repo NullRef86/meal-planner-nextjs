@@ -6,11 +6,11 @@ import Input from "../../_components/Input";
 import { useEffect, useState } from "react";
 import IncludeIngredientForm from "./IncludeIngredientForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 
 interface IProps {
     initialFormData?: IFormData;
-    ingredients: Ingredient[];
+    initialListOfAllIngredients: Ingredient[];
     action: (meal: IFormData) => void;
 }
 
@@ -19,7 +19,7 @@ export interface IFormData {
     name: string;
     ingredients: { ingredient: Ingredient, amount: number }[];
 }
-export default function Form({ initialFormData, ingredients, action }: IProps) {
+export default function Form({ initialFormData, initialListOfAllIngredients, action }: IProps) {
     const EMPTY_FORM: IFormData = {
         name: '',
         ingredients: [],
@@ -50,7 +50,7 @@ export default function Form({ initialFormData, ingredients, action }: IProps) {
                 </div>
 
                 <IncludeIngredientForm
-                    ingredients={ingredients}
+                    initialIngredientSelectList={initialListOfAllIngredients}
                     onAdd={(newIngredient) => {
                         const newIngredients = [...formData.ingredients];
                         if (!newIngredient.ingredient) {
@@ -97,7 +97,7 @@ export default function Form({ initialFormData, ingredients, action }: IProps) {
                                                     <td className="px-3 py-2 text-right">
                                                         {`${ingredient.amount} ${ingredient.ingredient.units}`}
                                                     </td>
-                                                    <td className="px-3 py-2 text-right">
+                                                    <td className="p-2 flex justify-end">
                                                         <Button
                                                             onClick={(e) => {
                                                                 e.preventDefault();
@@ -107,7 +107,7 @@ export default function Form({ initialFormData, ingredients, action }: IProps) {
                                                                 setFormData({ ...formData, ingredients: newIngredients });
                                                             }}
                                                         >
-                                                            <FontAwesomeIcon icon={faTrash} />
+                                                            <FontAwesomeIcon icon={faTrashAlt} />
                                                         </Button>
                                                     </td>
                                                 </tr>
@@ -126,6 +126,7 @@ export default function Form({ initialFormData, ingredients, action }: IProps) {
                     </Button>
                 </div>
             </div>
+
         </form>
     );
 }

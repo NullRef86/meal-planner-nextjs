@@ -2,6 +2,7 @@ import { getIngredient, updateIngredient } from "../../actions";
 import Form from "../../_components/Form";
 import Header from "../../../_components/Header";
 import Main from "../../../_components/Main";
+import { redirect } from "next/navigation";
 
 export default async function View({ params }: { params: { id: string } }) {
 
@@ -12,7 +13,14 @@ export default async function View({ params }: { params: { id: string } }) {
             <Header backUrl="/ingredients">
                 Edit Ingredient
             </Header>
-            <Form action={updateIngredient} ingredient={ingredient} />
+            <Form
+                ingredient={ingredient}
+                action={async (formData) => {
+                    'use server'
+                    updateIngredient(formData);
+                    redirect('/ingredients');
+                }}
+            />
         </Main>
     );
 }

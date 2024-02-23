@@ -16,8 +16,9 @@ export const ListItem = ({ ingredient }: IProps) => {
         <Link
             href={`/ingredients/view/${ingredient.id}`}
             className={`
-                flex-grow
-                p-3
+                ps-2
+                p-1
+                w-auto
                 bg-white 
                 border
                 border-gray-200
@@ -29,18 +30,18 @@ export const ListItem = ({ ingredient }: IProps) => {
                 dark:hover:bg-gray-700
             `}
         >
-            <li className="flex justify-between">
+            <li className="flex justify-between items-center">
                 <div>
-                    <h3 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    <span className="me-2 text-md font-bold tracking-tight text-gray-900 dark:text-white">
                         {ingredient.name}
-                    </h3>
-                    <div className="text-gray-600 dark:text-gray-400">
+                    </span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
                         {ingredient.units}
-                    </div>
+                    </span>
                 </div>
                 <form action={deleteIngredient}>
                     <input type="hidden" name="id" value={ingredient.id} />
-                    <Button className="px-3.5">
+                    <Button>
                         <FontAwesomeIcon icon={faTrashAlt} />
                     </Button>
                 </form>

@@ -18,7 +18,7 @@ export default async function View() {
 
             <Form
                 action={addMeal}
-                ingredients={ingredients}
+                initialListOfAllIngredients={ingredients}
             />
         </Main>
     );
