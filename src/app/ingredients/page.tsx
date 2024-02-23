@@ -1,6 +1,5 @@
 import { Suspense } from "react";
-import { addIngredient, getIngredients } from "./actions";
-import { Button, DefaultButtonClassName } from "../_components/client-components/Button";
+import { getIngredients } from "./actions";
 import { ListItem } from "./_components/client-components/ListItem";
 import Header from "../_components/Header";
 import Main from "../_components/Main";
