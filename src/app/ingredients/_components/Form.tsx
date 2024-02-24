@@ -36,6 +36,7 @@ export default function Form({ action, ingredient }: IProps) {
                     <label htmlFor="units">Units</label>
                     <Input
                         name="units"
+                        placeholder="item"
                         defaultValue={ingredient?.units}
                     />
                 </div>

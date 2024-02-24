@@ -21,7 +21,7 @@ interface IProps {
 
 export interface IFormData {
     ingredient?: Ingredient;
-    amount?: number;
+    amount: number;
 }
 
 const IncludeIngredientForm = ({
@@ -29,7 +29,11 @@ const IncludeIngredientForm = ({
     onAdd
 }: IProps) => {
 
-    const [formData, setFormData] = useState<IFormData>({});
+    const DEFAULT_FORM = {
+        amount: 1,
+    }
+
+    const [formData, setFormData] = useState<IFormData>(DEFAULT_FORM);
 
     const modalContext = useContext(ModalContext);
 
@@ -57,8 +61,8 @@ const IncludeIngredientForm = ({
 
                                                 setIngredientsSelectList(updatedIngredientsList);
                                                 setFormData({
-                                                    ...formData,
-                                                    ingredient: updatedIngredientsList.find(i => i.name === formData.get('name'))
+                                                    ...DEFAULT_FORM,
+                                                    ingredient: updatedIngredientsList.find(i => i.name === formData.get('name')),
                                                 });
 
                                                 modalContext.hide();
@@ -110,7 +114,7 @@ const IncludeIngredientForm = ({
                     <Input
                         name="amount"
                         type="number"
-                        onChange={(e) => setFormData({ ...formData, amount: parseInt(e.target.value) })}
+                        onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) })}
                         value={formData.amount ?? ''}
                     />
                 </div>
@@ -123,7 +127,7 @@ const IncludeIngredientForm = ({
                                 ingredient: formData.ingredient,
                                 amount: formData.amount ?? 0,
                             });
-                            setFormData({});
+                            setFormData(DEFAULT_FORM);
                         }}>
                         <FontAwesomeIcon icon={faPlus} className="text-xl" />
                     </Button>
