@@ -23,7 +23,7 @@ export const getIngredients = async () => {
     finally { await db.$disconnect(); }
 }
 
-export const addIngredient = async (formData: FormData) => {
+export const addIngredient = async (formData: FormData, preventRevalidation?: boolean) => {
     try {
         await db.ingredient.create({
             data: {
@@ -36,7 +36,9 @@ export const addIngredient = async (formData: FormData) => {
     catch (e) { console.error(e); }
     finally { await db.$disconnect(); }
 
-    revalidatePath('/');
+    if (!preventRevalidation) {
+        revalidatePath('/');
+    }
 }
 
 export const updateIngredient = async (formData: FormData) => {

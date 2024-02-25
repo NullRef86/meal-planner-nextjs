@@ -55,7 +55,7 @@ const IncludeIngredientForm = ({
                                     content: (
                                         <IngredientForm
                                             action={async (formData) => {
-                                                addIngredient(formData);
+                                                addIngredient(formData, true);
 
                                                 const updatedIngredientsList = await getIngredients();
 
