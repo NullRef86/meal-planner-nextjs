@@ -8,7 +8,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import LoadingPanel from "../_components/LoadingPanel";
 import Link from "../_components/Link";
 import { Ingredient } from "@prisma/client";
-import { groupBy } from "@/utils";
+import { compareNullableStrings, groupBy } from "@/utils";
 
 export const dynamic = 'force-dynamic';
 
@@ -46,7 +46,7 @@ export default async function Home({ searchParams }: IProps) {
                     <div className="flex flex-col gap-2">
                         {
                             groupedIngredients
-                                .sort(([a], [b]) => a.localeCompare(b))
+                                .sort(([a], [b]) => compareNullableStrings(a, b))
                                 .map(([category, ingredients]) => (
                                     <div key={category} className="flex flex-col gap-4">
                                         <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b-slate-500 border-b-2 text-center pb-2">

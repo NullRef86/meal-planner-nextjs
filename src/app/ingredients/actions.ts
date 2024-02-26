@@ -1,9 +1,8 @@
 'use server'
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { db } from "../../../prisma/client";
-
+import { EMPTY_CATEGORY_VALUE } from "./_components/Form";
 
 export const getIngredient = async (id: number) => {
 
@@ -24,12 +23,18 @@ export const getIngredients = async () => {
 }
 
 export const addIngredient = async (formData: FormData, preventRevalidation?: boolean) => {
+    let units = formData.get('units')! as string | null;
+    let category = formData.get('category')! as string | null;
+
+    if (!units) units = null;
+    if (category === EMPTY_CATEGORY_VALUE) category = null;
+
     try {
         await db.ingredient.create({
             data: {
                 name: formData.get('name')! as string,
-                units: formData.get('units')! as string,
-                category: formData.get('category')! as string,
+                units,
+                category,
             }
         });
     }
@@ -42,6 +47,12 @@ export const addIngredient = async (formData: FormData, preventRevalidation?: bo
 }
 
 export const updateIngredient = async (formData: FormData) => {
+    let units = formData.get('units')! as string | null;
+    let category: string | null = formData.get('category')! as string;
+
+    if (!units) units = null;
+    if (category === EMPTY_CATEGORY_VALUE) category = null;
+
     try {
         await db.ingredient.update({
             where: {
@@ -49,8 +60,8 @@ export const updateIngredient = async (formData: FormData) => {
             },
             data: {
                 name: formData.get('name')! as string,
-                units: formData.get('units')! as string,
-                category: formData.get('category')! as string,
+                units,
+                category,
             }
         });
     }

@@ -8,6 +8,8 @@ interface IProps {
     ingredient?: Ingredient | null;
 }
 
+export const EMPTY_CATEGORY_VALUE = 'None';
+
 export default function Form({ action, ingredient }: IProps) {
     return (
         <form
@@ -37,7 +39,7 @@ export default function Form({ action, ingredient }: IProps) {
                     <Input
                         name="units"
                         placeholder="item"
-                        defaultValue={ingredient?.units}
+                        defaultValue={ingredient?.units ?? ''}
                     />
                 </div>
 
@@ -45,9 +47,9 @@ export default function Form({ action, ingredient }: IProps) {
                     <label htmlFor="category">Category</label>
                     <Select
                         name="category"
-                        defaultValue={ingredient?.category}
+                        defaultValue={ingredient?.category ?? EMPTY_CATEGORY_VALUE}
                     >
-                        <option>Select...</option>
+                        <option>{EMPTY_CATEGORY_VALUE}</option>
                         <option>Baking</option>
                         <option>Bread</option>
                         <option>Cupboard</option>

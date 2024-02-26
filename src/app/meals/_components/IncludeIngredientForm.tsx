@@ -9,10 +9,10 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Ingredient } from "@prisma/client";
 import { useContext, useState } from "react";
-import { default as IngredientForm } from "@/app/ingredients/_components/Form";
+import { EMPTY_CATEGORY_VALUE, default as IngredientForm } from "@/app/ingredients/_components/Form";
 import { addIngredient, getIngredients } from "@/app/ingredients/actions";
 import { ModalContext } from "@/app/_components/Main";
-import { groupBy } from "@/utils";
+import { compareNullableStrings, groupBy } from "@/utils";
 
 interface IProps {
     initialIngredientSelectList: Ingredient[];
@@ -21,7 +21,7 @@ interface IProps {
 
 export interface IFormData {
     ingredient?: Ingredient;
-    amount: number;
+    amount?: number;
 }
 
 const IncludeIngredientForm = ({
@@ -29,9 +29,8 @@ const IncludeIngredientForm = ({
     onAdd
 }: IProps) => {
 
-    const DEFAULT_FORM = {
-        amount: 1,
-    }
+    const DEFAULT_AMOUNT = 1;
+    const DEFAULT_FORM = {};
 
     const [formData, setFormData] = useState<IFormData>(DEFAULT_FORM);
 
@@ -88,9 +87,9 @@ const IncludeIngredientForm = ({
                         </option>
                         {
                             groupBy(ingredientsSelectList, (ingredient) => ingredient.category)
-                                .sort(([a], [b]) => a.localeCompare(b))
+                                .sort(([a], [b]) => compareNullableStrings(a, b))
                                 .map(([category, ingredients]) => (
-                                    <optgroup key={category} label={category}>
+                                    <optgroup key={category} label={category ?? EMPTY_CATEGORY_VALUE}>
                                         {
                                             ingredients
                                                 .sort((a, b) => a.name.localeCompare(b.name))
@@ -99,7 +98,7 @@ const IncludeIngredientForm = ({
                                                         key={ingredient.id}
                                                         value={ingredient.id}
                                                     >
-                                                        {ingredient.name} ({ingredient.units})
+                                                        {ingredient.name}{ingredient.units ? ` (${ingredient.units})` : ''}
                                                     </option>
                                                 ))
                                         }
@@ -116,6 +115,7 @@ const IncludeIngredientForm = ({
                         type="number"
                         onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) })}
                         value={formData.amount ?? ''}
+                        placeholder={DEFAULT_AMOUNT.toString()}
                     />
                 </div>
                 <div className="flex items-end pb-px">
@@ -125,7 +125,7 @@ const IncludeIngredientForm = ({
                             if (!formData.ingredient) return;
                             onAdd({
                                 ingredient: formData.ingredient,
-                                amount: formData.amount ?? 0,
+                                amount: formData.amount ?? DEFAULT_AMOUNT,
                             });
                             setFormData(DEFAULT_FORM);
                         }}>

@@ -8,3 +8,10 @@ export const groupBy = <T, Q>(array: T[], predicate: (value: T, index: number, a
         }, new Map<Q, T[]>())
     );
 
+
+export const compareNullableStrings = (a: string | null, b: string | null) => {
+    if (a === b) return 0;
+    if (a === null) return -1;
+    if (b === null) return 1;
+    return a.localeCompare(b);
+}
