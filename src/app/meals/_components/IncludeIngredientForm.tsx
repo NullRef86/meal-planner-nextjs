@@ -40,40 +40,49 @@ const IncludeIngredientForm = ({
 
     const NEW_INGREDIENT_OPTION_KEY = '--New--';
 
-    const groupedOptions = useMemo(() => {
+    interface IGroupedOptions {
+        label: string;
+        options: IOption[];
+    }
+    interface IOption {
+        value: string;
+        label: string;
+        displayElement?: JSX.Element;
+    }
+
+    const groupedOptions: IGroupedOptions[] = useMemo(() => {
+        const actionsOptionGroup: IGroupedOptions = {
+            label: 'Actions',
+            options: [
+                {
+                    value: NEW_INGREDIENT_OPTION_KEY,
+                    label: 'Add New Ingredient',
+                }
+            ]
+        };
+
+
         return [
-            {
-                label: 'Actions',
-                options: [
-                    {
-                        value: NEW_INGREDIENT_OPTION_KEY,
-                        label: 'Add New Ingredient',
-                    }
-                ]
-            },
+            actionsOptionGroup,
             ...groupBy(ingredientsSelectList, (ingredient) => ingredient.category)
                 .sort(([a], [b]) => compareNullableStrings(a, b))
                 .map(([category, ingredients]) => {
-                    const options = ingredients
+                    const options: IOption[] = ingredients
                         .sort((a, b) => a.name.localeCompare(b.name))
                         .map((ingredient) => (
                             {
-                                value: ingredient.id,
-                                label: <span>{ingredient.name}{ingredient.units ? <span className="italic dark:text-gray-400 text-xs"> {ingredient.units}</span> : <></>}</span>,
+                                value: ingredient.id.toString(),
+                                label: ingredient.name,
+                                displayElement: <span>{ingredient.name}{ingredient.units ? <span className="italic dark:text-gray-400 text-xs ms-2"> {ingredient.units}</span> : <></>}</span>
                             }
                         ));
 
-                    return (
-                        category
-                            ? ({
-                                label: category,
-                                options
-                            })
-                            : ({
-                                label: 'Uncategorised',
-                                options
-                            })
-                    );
+                    const groupedOptions: IGroupedOptions = {
+                        label: category ?? 'Uncategorised',
+                        options
+                    }
+
+                    return groupedOptions;
                 })
         ];
     }, [ingredientsSelectList]);
@@ -82,16 +91,17 @@ const IncludeIngredientForm = ({
         <>
             <div className="flex gap-4">
 
-                <div className="w-1/2">
+                <div className="w-2/3">
                     <label>Ingredient:</label>
                     <ReactSelect
                         className="react-select-container"
                         classNamePrefix="react-select"
                         instanceId={'ingredient'}
                         options={groupedOptions}
+                        formatOptionLabel={(option: IOption) => option.displayElement ?? option.label}
                         value={
                             groupedOptions.find(option => option.label === formData.ingredient?.category)
-                                ?.options.find(option => option.value === formData.ingredient?.id)
+                                ?.options.find(option => option.value === formData.ingredient?.id.toString())
                             ?? null
                         }
                         onChange={(newValue: SingleValue<{
@@ -134,7 +144,7 @@ const IncludeIngredientForm = ({
                     />
                 </div>
 
-                <div className="w-1/2">
+                <div className="w-1/3">
                     <label>Amount:</label>
                     <Input
                         name="amount"
