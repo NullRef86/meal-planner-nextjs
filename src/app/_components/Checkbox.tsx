@@ -16,16 +16,14 @@ export default function Checkbox({ strikethrough, children, ...props }: IProps) 
                 className="
                     w-4
                     h-4
-                    text-blue-600
-                    bg-gray-100
-                    border-gray-300
+                    text-purple-600
                     rounded
-                    focus:ring-blue-500
-                    dark:focus:ring-blue-600
-                    dark:ring-offset-gray-800 
+                    focus:ring-purple-600
+                    ring-offset-gray-800 
                     focus:ring-2
-                    dark:bg-gray-700
-                    dark:border-gray-600
+                    bg-gray-700
+                    border-gray-600
+                    accent-purple-800
                 "
                 {...props}
             />
@@ -38,8 +36,7 @@ export default function Checkbox({ strikethrough, children, ...props }: IProps) 
                             'm-2',
                             'text-lg',
                             'font-medium',
-                            strikethrough ? 'text-gray-500' : 'text-gray-900',
-                            strikethrough ? 'text-gray-500' : 'dark:text-gray-300',
+                            strikethrough ? 'text-gray-500' : 'text-gray-300',
                             'w-full',
                             'cursor-pointer',
                             strikethrough && 'line-through'

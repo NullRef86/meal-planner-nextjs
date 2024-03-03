@@ -3,17 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
 
 body {
@@ -42,49 +34,34 @@ body {
     p-0.5
     border
 
-  bg-gray-50 
-  border-gray-300
-  text-gray-900 
-  focus:ring-blue-500
-  focus:border-blue-500
-
-  dark:bg-gray-700
-  dark:border-gray-600
-  dark:placeholder-gray-400
-  dark:text-white
-  dark:focus:ring-blue-500
-  dark:focus:border-blue-500
+  bg-gray-700
+  border-gray-600
+  placeholder-gray-400
+  text-white
+  focus:ring-purple-600
+  focus:border-purple-600
   ;
   }
 
   .react-select-container .react-select__control--is-focused {
     @apply
-    border-gray-300
-
-     dark:border-gray-600 
+     border-gray-600 
      shadow-none;
   }
 
   .react-select-container .react-select__menu {
     @apply 
     border-2 
-    bg-gray-50      
-    border-gray-300 
-
-    dark:bg-gray-700
-    dark:border-gray-600;
+    bg-gray-700
+    border-gray-600;
   }
 
   .react-select-container .react-select__option {
     @apply 
     text-sm
-    text-gray-900 
-    bg-gray-50 
-    hover:bg-neutral-200 
-
-    dark:text-white 
-    dark:bg-gray-700
-    dark:hover:bg-neutral-800;
+    text-white 
+    bg-gray-700
+    hover:bg-neutral-800;
   }
 
   .react-select-container .react-select__indicator-separator {
@@ -94,11 +71,11 @@ body {
   .react-select-container .react-select__input-container,
   .react-select-container .react-select__placeholder,
   .react-select-container .react-select__single-value {
-    @apply text-neutral-600 dark:text-neutral-200;
+    @apply text-neutral-200;
   }
   
   .react-select-container .react-select__placeholder {
-    @apply dark:text-gray-400;
+    @apply text-gray-400;
   }
 
   .react-select-container .react-select__group-heading {

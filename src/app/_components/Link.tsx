@@ -10,7 +10,7 @@ export default function Link({ children, href, button, ...props }: IProps) {
     return (
         <NextLink
             className={
-                button ? DefaultButtonClassName : 'font-medium text-blue-600 dark:text-blue-500 hover:underline'
+                button ? DefaultButtonClassName : 'font-medium text-purple-600 hover:underline'
             }
             href={href}
         >

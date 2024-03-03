@@ -72,7 +72,7 @@ const IncludeIngredientForm = ({
                             {
                                 value: ingredient.id.toString(),
                                 label: ingredient.name,
-                                displayElement: <span>{ingredient.name}{ingredient.units ? <span className="italic dark:text-gray-400 text-xs ms-2"> {ingredient.units}</span> : <></>}</span>
+                                displayElement: <span>{ingredient.name}{ingredient.units ? <span className="italic text-gray-400 text-xs ms-2"> {ingredient.units}</span> : <></>}</span>
                             }
                         ));
 
@@ -109,8 +109,6 @@ const IncludeIngredientForm = ({
             )
         });
     };
-
-    // const [isOpen, setIsOpen] = useState(false);
 
     return (
         <>

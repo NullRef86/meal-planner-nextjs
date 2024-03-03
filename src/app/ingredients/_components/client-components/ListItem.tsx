@@ -19,23 +19,20 @@ export const ListItem = ({ ingredient }: IProps) => {
                 ps-2
                 p-1
                 w-auto
-                bg-white 
                 border
-                border-gray-200
                 rounded-lg 
                 shadow
-                hover:bg-gray-100
-                dark:bg-gray-800
-                dark:border-gray-700 
-                dark:hover:bg-gray-700
+                bg-gray-800
+                border-gray-700 
+                hover:bg-gray-700
             `}
         >
             <li className="flex justify-between items-center">
                 <div>
-                    <span className="me-2 text-md font-bold tracking-tight text-gray-900 dark:text-white">
+                    <span className="me-2 text-md font-bold tracking-tight text-white">
                         {ingredient.name}
                     </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm text-gray-400">
                         {ingredient.units}
                     </span>
                 </div>

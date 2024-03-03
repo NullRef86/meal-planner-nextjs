@@ -49,7 +49,7 @@ export default async function Home({ searchParams }: IProps) {
                                 .sort(([a], [b]) => compareNullableStrings(a, b))
                                 .map(([category, ingredients]) => (
                                     <div key={category} className="flex flex-col gap-4">
-                                        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b-slate-500 border-b-2 text-center pb-2">
+                                        <h2 className="text-2xl font-bold tracking-tight text-white border-b-slate-500 border-b-2 text-center pb-2">
                                             {category}
                                         </h2>
                                         <ListItems ingredients={ingredients} />

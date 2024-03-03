@@ -65,8 +65,8 @@ export default function Form({ initialFormData, initialListOfAllIngredients, act
                     }}
                 />
                 <div className="relative overflow-x-auto rounded-lg">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-sm text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <table className="w-full text-sm text-left rtl:text-right text-gray-400">
+                        <thead className="text-sm bg-gray-700 text-gray-400">
                             <tr>
                                 <th scope="col" className="text-left px-3 py-1.5">
                                     Ingredient
@@ -81,7 +81,7 @@ export default function Form({ initialFormData, initialListOfAllIngredients, act
                             {
                                 formData.ingredients.length === 0
                                     ? (
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <tr className="border-b bg-gray-800 border-gray-700">
                                             <td colSpan={3} className="text-center p-3">
                                                 No ingredients added yet.
                                             </td>
@@ -90,7 +90,7 @@ export default function Form({ initialFormData, initialListOfAllIngredients, act
                                     : (
                                         formData.ingredients.map((ingredient) => {
                                             return (
-                                                <tr key={ingredient.ingredient.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <tr key={ingredient.ingredient.id} className="border-b bg-gray-800 border-gray-700">
                                                     <td className="px-3 py-2">
                                                         {ingredient.ingredient.name}
                                                     </td>

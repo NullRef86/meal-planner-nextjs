@@ -9,7 +9,7 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, PropsWit
     pendingText?: React.ReactNode;
 }
 
-export const DefaultButtonClassName = 'focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-3.5 py-2.5 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 flex gap-2 items-center';
+export const DefaultButtonClassName = 'focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-3.5 py-2.5 bg-purple-600 hover:bg-purple-700 focus:ring-purple-900 flex gap-2 items-center';
 
 export const Button = ({ children, pendingText, ...props }: IProps) => {
     const { pending } = useFormStatus();
