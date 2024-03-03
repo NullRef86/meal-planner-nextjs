@@ -95,7 +95,7 @@ export default function Form({ initialFormData, initialListOfAllIngredients, act
                                                         {ingredient.ingredient.name}
                                                     </td>
                                                     <td className="px-3 py-2 text-right">
-                                                        {`${ingredient.amount} ${ingredient.ingredient.units}`}
+                                                        {`${ingredient.amount} ${ingredient.ingredient.units ?? ''}`}
                                                     </td>
                                                     <td className="p-2 flex justify-end">
                                                         <Button

@@ -87,6 +87,31 @@ const IncludeIngredientForm = ({
         ];
     }, [ingredientsSelectList]);
 
+    const showAddIngredientModal = () => {
+        modalContext.show({
+            title: 'Add New Ingredient',
+            content: (
+                <IngredientForm
+                    action={async (formData) => {
+                        addIngredient(formData, true);
+
+                        const updatedIngredientsList = await getIngredients();
+
+                        setIngredientsSelectList(updatedIngredientsList);
+                        setFormData({
+                            ...DEFAULT_FORM,
+                            ingredient: updatedIngredientsList.find(i => i.name === formData.get('name')),
+                        });
+
+                        modalContext.hide();
+                    }}
+                />
+            )
+        });
+    };
+
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
         <>
             <div className="flex gap-4">
@@ -104,6 +129,15 @@ const IncludeIngredientForm = ({
                                 ?.options.find(option => option.value === formData.ingredient?.id.toString())
                             ?? null
                         }
+                        onFocus={() => setIsOpen(true)}
+                        menuIsOpen={isOpen}
+                        noOptionsMessage={() => (
+                            <div onClick={() => {
+                                showAddIngredientModal();
+                                // click on document to close the menu
+                                setIsOpen(false);
+                            }}>Add New Ingrediant</div>
+                        )}
                         onChange={(newValue: SingleValue<{
                             value: number;
                             label: JSX.Element;
@@ -113,26 +147,7 @@ const IncludeIngredientForm = ({
                         }
                         >) => {
                             if (newValue?.value === NEW_INGREDIENT_OPTION_KEY) {
-                                modalContext.show({
-                                    title: 'Add New Ingredient',
-                                    content: (
-                                        <IngredientForm
-                                            action={async (formData) => {
-                                                addIngredient(formData, true);
-
-                                                const updatedIngredientsList = await getIngredients();
-
-                                                setIngredientsSelectList(updatedIngredientsList);
-                                                setFormData({
-                                                    ...DEFAULT_FORM,
-                                                    ingredient: updatedIngredientsList.find(i => i.name === formData.get('name')),
-                                                });
-
-                                                modalContext.hide();
-                                            }}
-                                        />
-                                    )
-                                });
+                                showAddIngredientModal();
                                 return;
                             }
 
