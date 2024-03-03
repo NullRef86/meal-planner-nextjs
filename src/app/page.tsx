@@ -15,6 +15,9 @@ export default function Home() {
                 <Link href="/meals">
                     View All Meals
                 </Link>
+                <Link href="/plan">
+                    Plan a Shop
+                </Link>
             </div>
         </Main>
     )

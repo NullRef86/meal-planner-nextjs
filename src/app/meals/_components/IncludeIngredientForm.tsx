@@ -63,7 +63,6 @@ const IncludeIngredientForm = ({
 
 
         return [
-            actionsOptionGroup,
             ...groupBy(ingredientsSelectList, (ingredient) => ingredient.category)
                 .sort(([a], [b]) => compareNullableStrings(a, b))
                 .map(([category, ingredients]) => {
@@ -83,7 +82,8 @@ const IncludeIngredientForm = ({
                     }
 
                     return groupedOptions;
-                })
+                }),
+            actionsOptionGroup
         ];
     }, [ingredientsSelectList]);
 
@@ -110,7 +110,7 @@ const IncludeIngredientForm = ({
         });
     };
 
-    const [isOpen, setIsOpen] = useState(false);
+    // const [isOpen, setIsOpen] = useState(false);
 
     return (
         <>
@@ -129,15 +129,10 @@ const IncludeIngredientForm = ({
                                 ?.options.find(option => option.value === formData.ingredient?.id.toString())
                             ?? null
                         }
-                        onFocus={() => setIsOpen(true)}
-                        menuIsOpen={isOpen}
-                        noOptionsMessage={() => (
-                            <div onClick={() => {
-                                showAddIngredientModal();
-                                // click on document to close the menu
-                                setIsOpen(false);
-                            }}>Add New Ingrediant</div>
-                        )}
+                        filterOption={(option, rawInput) => {
+                            const input = rawInput.toLowerCase();
+                            return option.value === NEW_INGREDIENT_OPTION_KEY || option.label.toLowerCase().includes(input);
+                        }}
                         onChange={(newValue: SingleValue<{
                             value: number;
                             label: JSX.Element;
