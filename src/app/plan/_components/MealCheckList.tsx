@@ -3,7 +3,7 @@
 import Checkbox from "@/app/_components/Checkbox";
 import { MealWithIngredients } from "@/app/meals/models";
 import { groupBy } from "@/utils";
-import { useMemo, useState } from "react";
+import { ReactElement, useEffect, useMemo, useState } from "react";
 
 interface IProps {
     meals: MealWithIngredients[];
@@ -15,7 +15,7 @@ interface GroupedIngredient {
     category: string | null;
     units: string | null;
     amountTotal: number;
-    label: string;
+    label: ReactElement;
     isDeselected: boolean;
 };
 
@@ -46,7 +46,13 @@ export default function MealCheckList({ meals }: IProps) {
                 category: ingredient.category,
                 units: ingredient.units,
                 amountTotal,
-                label: `${amountTotal} ${ingredient.units} ${ingredient.name}`,
+                label: (
+                    <span>
+                        <span>{amountTotal}</span>
+                        {ingredient.units && <span className="ms-1">{ingredient.units}</span>}
+                        <span className="ms-3">{ingredient.name}</span>
+                    </span>
+                ),
                 isDeselected: deselectedIds.some(x => x === ingredient.id),
             };
         });
@@ -62,7 +68,32 @@ export default function MealCheckList({ meals }: IProps) {
                 .filter((value, index, self) => self.indexOf(value) === index)
                 .flat()
         );
-    }, [ingredients, deselectedIds]);
+    }, [ingredients]);
+
+    useEffect(() => {
+        const data = localStorage.getItem('MealCheckListData');
+        if (data) {
+            const parsed = JSON.parse(data);
+            setSelectedMeals(parsed.selectedMeals);
+            setDeselectedIds(parsed.deselectedIds);
+        }
+    }, []);
+
+    useEffect(() => {
+        // This check feels like it needs more time in the oven...
+        if (selectedMeals.length === 0 && deselectedIds.length === 0) {
+            return;
+        }
+
+        localStorage.setItem(
+            'MealCheckListData',
+            JSON.stringify({
+                selectedMeals,
+                deselectedIds
+            })
+        );
+
+    }, [selectedMeals, deselectedIds]);
 
     return (
         <div className="flex flex-col gap-4">
@@ -70,20 +101,25 @@ export default function MealCheckList({ meals }: IProps) {
                 {
                     meals.map((meal) => (
                         <li key={meal.id}>
-                            <div className="
-                                flex 
-                                items-center 
-                                ps-4
-                                p-1
-                                w-auto
-                                border
-                                rounded-lg 
-                                shadow
-                                bg-gray-800
-                                border-gray-700 
-                                hover:bg-gray-700
-                            ">
+                            <label
+                                className="
+                                    flex 
+                                    gap-2
+                                    items-center 
+                                    ps-4
+                                    p-3
+                                    w-auto
+                                    border
+                                    rounded-lg 
+                                    shadow
+                                    bg-gray-800
+                                    border-gray-700 
+                                    hover:bg-gray-700
+                                    cursor-pointer
+                                "
+                            >
                                 <Checkbox
+                                    checked={selectedMeals.some(x => x.id === meal.id)}
                                     onChange={(e) => {
                                         if (e.target.checked) {
                                             setSelectedMeals([...selectedMeals, meal]);
@@ -91,10 +127,9 @@ export default function MealCheckList({ meals }: IProps) {
                                             setSelectedMeals(selectedMeals.filter((selectedMeal) => selectedMeal.id !== meal.id));
                                         }
                                     }}
-                                >
-                                    {meal.name}
-                                </Checkbox>
-                            </div>
+                                />
+                                {meal.name}
+                            </label>
                         </li>
                     ))
                 }
@@ -136,7 +171,7 @@ export default function MealCheckList({ meals }: IProps) {
                     ))
             }
             {
-                deselectedIds.length > 0
+                deselectedIds.length > 0 && selectedMeals.length > 0
                 && (
                     <div className="text-gray-500">
                         <div>
