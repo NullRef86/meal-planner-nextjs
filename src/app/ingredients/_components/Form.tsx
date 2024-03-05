@@ -29,6 +29,7 @@ export default function Form({ action, ingredient }: IProps) {
                 <div>
                     <label htmlFor="name">Name</label>
                     <Input
+                        autoFocus
                         name="name"
                         defaultValue={ingredient?.name}
                     />

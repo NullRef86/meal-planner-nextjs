@@ -7,7 +7,7 @@ import { Button } from "@/app/_components/client-components/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Ingredient } from "@prisma/client";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import { default as IngredientForm } from "@/app/ingredients/_components/Form";
 import { addIngredient, getIngredients } from "@/app/ingredients/actions";
 import { ModalContext } from "@/app/_components/Main";
@@ -110,6 +110,8 @@ const IncludeIngredientForm = ({
         });
     };
 
+    var ingredientSelect = useRef<any>(null);
+
     return (
         <>
             <div className="flex gap-4">
@@ -117,6 +119,7 @@ const IncludeIngredientForm = ({
                 <div className="w-2/3">
                     <label>Ingredient:</label>
                     <ReactSelect
+                        ref={ingredientSelect}
                         className="react-select-container"
                         classNamePrefix="react-select"
                         instanceId={'ingredient'}
@@ -172,6 +175,7 @@ const IncludeIngredientForm = ({
                                 amount: formData.amount ?? DEFAULT_AMOUNT,
                             });
                             setFormData(DEFAULT_FORM);
+                            ingredientSelect?.current?.focus();
                         }}>
                         <FontAwesomeIcon icon={faPlus} className="text-xl" />
                     </Button>

@@ -44,6 +44,7 @@ export default function Form({ initialFormData, initialListOfAllIngredients, act
                     <Input
                         name="name"
                         type="text"
+                        autoFocus
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         value={formData.name}
                     />
