@@ -18,15 +18,15 @@ export const ListItem = ({ meal }: IProps) => {
                 key={meal.id}
                 className="flex justify-between px-6 py-3 border rounded-lg shadow bg-gray-800 border-gray-700 hover:bg-gray-700"
             >
-                <div>
-                    <h2 className="mb-2 text-2xl font-bold tracking-tight text-white">
+                <div className="w-full">
+                    <h2 className="mb-2 text-2xl font-bold tracking-tight text-white text-center">
                         {meal.name}
                     </h2>
                     <ul>
                         {
                             meal.ingredients.map((recepeItem) => (
-                                <li key={recepeItem.ingredient.id} className="grid grid-cols-2 gap-2">
-                                    <span className="flex gap-1 text-sm text-gray-400">
+                                <li key={recepeItem.ingredient.id} className="grid grid-cols-2 gap-4">
+                                    <span className="flex gap-1 text-sm text-gray-400 justify-end">
                                         <span>
                                             {recepeItem.amount}
                                         </span>
