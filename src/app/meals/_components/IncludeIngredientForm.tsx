@@ -104,6 +104,8 @@ const IncludeIngredientForm = ({
                         });
 
                         modalContext.hide();
+
+                        amountInput?.current?.focus();
                     }}
                 />
             )
@@ -111,6 +113,7 @@ const IncludeIngredientForm = ({
     };
 
     var ingredientSelect = useRef<any>(null);
+    var amountInput = useRef<any>(null);
 
     return (
         <>
@@ -160,6 +163,7 @@ const IncludeIngredientForm = ({
                     <Input
                         name="amount"
                         type="number"
+                        ref={amountInput}
                         onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) })}
                         value={formData.amount ?? ''}
                         placeholder={DEFAULT_AMOUNT.toString()}
